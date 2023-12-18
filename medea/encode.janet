@@ -77,6 +77,7 @@
         (cond
           (= kv? item)
           (do
+            (set first? true)
             (def kv (array/pop processing))
             (array/push processing (kv 1))
             (buffer/push res `"` (escape (kv 0)) `":`))
@@ -101,6 +102,9 @@
               (array/push processing kv?))
             (buffer/push res "{"))
 
+          (= :null item)
+          (buffer/push res "null")
+
           (and (bytes? item) (not (symbol? item)))
           (buffer/push res `"` (escape item) `"`)
 
@@ -114,9 +118,6 @@
           (buffer/push res "false")
 
           (nil? item)
-          (buffer/push res "null")
-
-          (= :null item)
           (buffer/push res "null")
 
           (error (string "cannot encode " (type item) " '" item "' to JSON"))))))

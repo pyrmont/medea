@@ -52,7 +52,7 @@
                    (slurp input-path)))
       (def to-janet? (opts "reverse"))
       (def output (if to-janet?
-                    (medea/encode (parse input))
+                    (string (medea/encode (parse input)))
                     (medea/decode input)))
       (def output-path (opts "output"))
       (if (= :stdout output-path)
