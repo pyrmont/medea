@@ -6,8 +6,8 @@
   (if (one? (length args))
     (parse (string `"\u` (args 0) `"`))
     (parse (string/format `"\U%06x"`
-                          (+ (blshift (- (scan-number (string "0x" (args 0))) 0xd800) 10)
-                             (- (scan-number (string "0x" (args 1))) 0xdc00)
+                          (+ (blshift (- (args 0) 0xd800) 10)
+                             (- (args 1) 0xdc00)
                              0x10000)))))
 
 (def- g
@@ -20,7 +20,9 @@
                  :string (% (* `"` :chars `"`))
                  :chars (any (+ :escape '(to (set `"\`))))
                  :escape (+ (/ '(* `\` (set `"\/bfnrt`)) ,escape) :unicode)
-                 :unicode (/ (+ (* `\u` '(* (set "Dd") (set "8AaBb") (2 :h)) `\u` '(4 :h)) (* `\u` '(4 :h))) ,unicode)
+                 :unicode (/ (+ (* :hi-surr :lo-surr) (* `\u` '(4 :h))) ,unicode)
+                 :hi-surr (* `\u` (number (* (set "Dd") (set "8AaBb") (2 :h)) 16))
+                 :lo-surr (* `\u` (number (* (set "Dd") (set "CcDdEeFf") (2 :h)) 16))
                  :number (number (* :integer (? :fraction) (? :exponent)))
                  :integer (* (? "-") (+ (* (set "123456789") :d+) :d))
                  :fraction (* "." :d+)
