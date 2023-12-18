@@ -21,7 +21,7 @@
                  :chars (any (+ :escape '(to (set `"\`))))
                  :escape (+ (/ '(* `\` (set `"\/bfnrt`)) ,escape) :unicode)
                  :unicode (/ (+ (* `\u` '(* (set "Dd") (set "8AaBb") (2 :h)) `\u` '(4 :h)) (* `\u` '(4 :h))) ,unicode)
-                 :number (/ '(* :integer (? :fraction) (? :exponent)) ,scan-number)
+                 :number (number (* :integer (? :fraction) (? :exponent)))
                  :integer (* (? "-") (+ (* (set "123456789") :d+) :d))
                  :fraction (* "." :d+)
                  :exponent (* (set "Ee") (? (set "+-")) :d+)
