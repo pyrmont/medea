@@ -7,16 +7,12 @@ be used as a library or a CLI utility.
 
 ## Installation
 
-Build the `medea` executable using JPM:
+To install the CLI tool, run:
 
-```sh
-git clone https://github.com/pyrmont/medea
-cd medea
-jpm -l run exe-deps
-jpm -l build
+```shell
+$ jpm install https://github.com/pyrmont/medea
+$ medea --help
 ```
-
-Now copy the `build/medea` executable to a directory on your PATH.
 
 Medea can also be used as a library. Add the dependency to your `project.janet` file:
 
@@ -27,12 +23,14 @@ Medea can also be used as a library. Add the dependency to your `project.janet` 
 
 ## Usage
 
-The `medea` executable can be used like this:
+### Command Line
+
+The `medea` CLI tool can be used like this:
 
 ```text
-Usage: medea [--output <path>] [--reverse] [<input>]
+Usage: medea [--output <path>] [--pretty] [--reverse] [<input>]
 
-Another JSON encoder and decoder in Janet, tragically.
+Another JSON encoder and decoder in Janet, tragically. By default, decodes JSON into Janet.
 
 Parameters:
 
@@ -41,10 +39,17 @@ Parameters:
 Options:
 
  -o, --output <path>    The <path> for the output file. (Default: stdout)
+ -p, --pretty           Make the output pretty.
  -r, --reverse          Reverse the polarity and convert from Janet to JSON.
 
  -h, --help             Show this help message.
  ```
+
+### Library
+
+Documentation for Medea's API is in [api.md][api].
+
+[api]: https://github.com/pyrmont/medea/blob/master/api.md
 
 ## Bugs
 
