@@ -1,7 +1,7 @@
-(use testament)
+(use ../deps/testament/src/testament)
 
 
-(import ../medea/encode :as medea)
+(import ../lib/encode :as medea)
 
 
 (deftest encode

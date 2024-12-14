@@ -1,5 +1,5 @@
-(import argy-bargy :as argy)
-(import ./init :as medea)
+(import ../deps/argy-bargy/argy-bargy :as argy)
+(import ../init :as medea)
 
 
 (def config
@@ -13,12 +13,17 @@
                        :kind    :single
                        :proxy   "path"
                        :short   "o"}
+           "--pretty" {:default false
+                       :help    "Make the output pretty."
+                       :kind    :flag
+                       :short   "p"}
            "--reverse" {:default false
                         :help    "Reverse the polarity and convert from Janet to JSON."
                         :kind    :flag
                         :short   "r"}
            "-------------------------------------------"]
-   :info {:about "Another JSON encoder and decoder in Janet, tragically."}})
+   :info {:about `Another JSON encoder and decoder in Janet, tragically. By
+                  default, decodes JSON into Janet.`}})
 
 
 (defn- main [& args]
@@ -50,10 +55,12 @@
                        (buffer/push lines line))
                      lines)
                    (slurp input-path)))
-      (def to-janet? (opts "reverse"))
-      (def output (if to-janet?
-                    (string (medea/encode (parse input)))
-                    (medea/decode input)))
+      (def prettify? (opts "pretty"))
+      (def to-json? (opts "reverse"))
+      (def output (if to-json?
+                    (string (medea/encode (parse input) prettify?))
+                    (medea/decode input)
+                    ))
       (def output-path (opts "output"))
       (if (= :stdout output-path)
         (printf "%j" output)

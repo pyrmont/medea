@@ -54,9 +54,11 @@
   ```
   Encodes a native Janet data structure into JSON
   ```
-  [data]
+  [data &keys {:pretty? pretty?}]
+  (default pretty? false)
   (var res @"")
   (var first? true)
+  (var indent 0)
   (def close-arr @"")
   (def close-obj @"")
   (def kv? @"")
@@ -73,7 +75,10 @@
       (do
         (if first?
           (set first? false)
-          (buffer/push res ","))
+          (do
+            (buffer/push res ",")
+            (when pretty?
+              (buffer/push res "\n" (string/repeat " " indent)))))
         (cond
           (= kv? item)
           (do
@@ -91,7 +96,10 @@
             (var i new-length)
             (each el item
               (put processing (-- i) el))
-            (buffer/push res "["))
+            (buffer/push res "[")
+            (when pretty?
+              (+= indent 2)
+              (buffer/push "\n" (string/repeat " " indent))))
 
           (dictionary? item)
           (do
@@ -100,7 +108,10 @@
             (eachp kv item
               (array/push processing kv)
               (array/push processing kv?))
-            (buffer/push res "{"))
+            (buffer/push res "{")
+            (when pretty?
+              (+= indent 2)
+              (buffer/push "\n" (string/repeat " " indent))))
 
           (= :null item)
           (buffer/push res "null")
